@@ -1,5 +1,5 @@
 numpy
 matplotlib
-pylab
+#pylab
 pandas
 scipy
