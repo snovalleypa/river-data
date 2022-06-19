@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "no args",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "fetch-data",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "args": ["-y", "2022", "-s", "SVPA"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

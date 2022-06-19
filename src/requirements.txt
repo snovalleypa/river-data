@@ -1,0 +1,8 @@
+numpy
+matplotlib
+pandas
+scipy
+requests
+pytz
+argparse
+hydrofunctions

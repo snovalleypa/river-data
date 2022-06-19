@@ -1,5 +1,0 @@
-numpy
-matplotlib
-#pylab
-pandas
-scipy

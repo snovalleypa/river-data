@@ -1,0 +1,94 @@
+{
+  "locations": [
+    {
+      "id": "12143400",
+      "name": "South Fork",
+      "source": "USGS",
+      "upstreamOf": "12144500"
+    },
+    {
+      "id": "12141300",
+      "name": "Middle Fork",
+      "source": "USGS",
+      "upstreamOf": "12144500"
+    },
+    {
+      "id": "12142000",
+      "name": "North Fork",
+      "source": "USGS",
+      "upstreamOf": "12144500"
+    },
+    {
+      "id": "12144500",
+      "name": "Falls",
+      "source": "USGS",
+      "upstreamOf": "12149000",
+      "riverMile": 38,
+      "stageOffset": 120
+    },
+    {
+      "id": "SVPA-37",
+      "name": "Sno Falls Golf",
+      "source": "SVPA",
+      "riverMile": 37
+    },
+    { "id": "SVPA-36", "name": "Neal Road", "source": "SVPA", "riverMile": 36 },
+    { "id": "SVPA-34", "name": "The T", "source": "SVPA", "riverMile": 34 },
+    {
+      "id": "SVPA-33",
+      "name": "Keller Dairy",
+      "source": "SVPA",
+      "riverMile": 33
+    },
+    {
+      "id": "SVPA-29",
+      "name": "Jubilee Farm",
+      "source": "SVPA",
+      "riverMile": 29
+    },
+    {
+      "id": "SVPA-26",
+      "name": "Blue Heron Golf",
+      "source": "SVPA",
+      "riverMile": 26
+    },
+    {
+      "id": "SVPA-25",
+      "name": "Tolt Hill Road",
+      "source": "SVPA",
+      "riverMile": 25
+    },
+    {
+      "id": "12149000",
+      "name": "Carnation",
+      "source": "USGS",
+      "upstreamOf": "12150400",
+      "riverMile": 22
+    },
+    {
+      "id": "SVPA-17",
+      "name": "Goose & Gander Farm",
+      "source": "SVPA",
+      "riverMile": 17
+    },
+    {
+      "id": "SVPA-15",
+      "name": "124th East",
+      "source": "SVPA",
+      "riverMile": 15
+    },
+    {
+      "id": "SVPA-15B",
+      "name": "124th West",
+      "source": "SVPA",
+      "riverMile": 15
+    },
+    {
+      "id": "SVPA-12",
+      "name": "Wild Canary Farm",
+      "source": "SVPA",
+      "riverMile": 12
+    },
+    { "id": "12150400", "name": "Duvall", "source": "USGS", "riverMile": 9 }
+  ]
+}
