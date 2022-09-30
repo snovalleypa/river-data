@@ -1,0 +1,46 @@
+{
+  "SVPA-23": {
+    "name": "Stosal Bridge",
+    "overrides": {
+      "2019 - October": null
+    }
+  },
+  "SVPA-26": {
+    "name": "Blue Heron Golf",
+    "overrides": {
+      "2021 - January": null,
+      "2020 - February 7th": null,
+      "2020 - February 1st": null,
+      "2019 - October": null
+    }
+  },
+  "SVPA-34": {
+    "name": "The T",
+    "overrides": {
+      "2022 - January 21st": null,
+      "2021 - January": null,
+      "2019 - December": null
+    }
+  },
+  "SVPA-33": {
+    "name": "Keller Dairy",
+    "overrides": {
+      "2021 - January": null
+    }
+  },
+  "SVPA-37": {
+    "name": "Sno Falls Golf",
+    "overrides": {
+      "2021 - January": null,
+      "2022 - January 7th": { "stage": 87.41 }
+    }
+  },
+  "SVPA-17": {
+    "name": "Goose & Gander",
+    "overrides": {
+      "2020 - February 7th": null,
+      "2020 - February 1st": null,
+      "2021 - January": null
+    }
+  }
+}
