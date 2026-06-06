@@ -39,7 +39,7 @@ def get_USGS_location_year(usgs_id, data_year):
 
 def get_SVPA_location_year(svpa_id, data_year):
   start = '{}-10-01T00:00:00Z'.format(data_year-1)
-  end = '{}-09-30T00:00:00Z'.format(data_year)
+  end = '{}-10-01T00:00:00Z'.format(data_year)
   params = {
     "regionId":"1",
     "id": svpa_id,
@@ -50,6 +50,7 @@ def get_SVPA_location_year(svpa_id, data_year):
   }
   print("fetching: {} for {}".format(svpa_id, data_year))
   response = requests.get("https://prodplanreadingsvc.azurewebsites.net/api/GetGageReadingsUTC", params)
+  response.raise_for_status()
   readings = response.json()['readings']
   if len(readings) == 0:
     print("no data")
@@ -60,7 +61,7 @@ def get_SVPA_location_year(svpa_id, data_year):
   })
   df['stage_qualifiers'] = ''
   df.drop(columns=['isDeleted', 'isMissing'], inplace=True, errors='ignore')
-  df.index = pd.to_datetime(df.pop("timestamp"), utc=True)
+  df.index = pd.to_datetime(df.pop("timestamp"), utc=True, format='ISO8601')
   df.index.name = 'datetimeUTC'
   clean_write_data(df, "SVPA", svpa_id, data_year)
 
@@ -86,24 +87,32 @@ def load(locations, years):
       if source=="USGS":
         try:
           get_USGS_location_year(loc_id, data_year)
-        except:
+        except Exception as e:
           try:
-            print('retry: {}-{}'.format(loc_id, data_year))
-            get_USGS_location_year(usgs_id, data_year)
-          except:
-            print('FAILED: {}-{}'.format(loc_id, data_year))
+            print('retry: {}-{} ({})'.format(loc_id, data_year, e))
+            get_USGS_location_year(loc_id, data_year)
+          except Exception as e:
+            print('FAILED: {}-{} ({})'.format(loc_id, data_year, e))
       else:
-        get_SVPA_location_year(loc_id, data_year)
+        try:
+          get_SVPA_location_year(loc_id, data_year)
+        except Exception as e:
+          try:
+            print('retry: {}-{} ({})'.format(loc_id, data_year, e))
+            get_SVPA_location_year(loc_id, data_year)
+          except Exception as e:
+            print('FAILED: {}-{} ({})'.format(loc_id, data_year, e))
 
 def fix(locations, years):
   for data_year in years:
     for loc in locations:
-      usgs_id = loc['id']
-      path = data_path(usgs_id, data_year)
+      loc_id = loc['id']
+      source = loc['source']
+      path = data_path(source, loc_id, data_year)
       try:
         df = pd.read_parquet(path)
-      except:
-        print('no-file: {}'.format(path))
+      except Exception as e:
+        print('no-file: {} ({})'.format(path, e))
         continue
       if 'stage' not in df.columns:
         df['stage'] = np.nan
@@ -128,12 +137,14 @@ def main():
   years = cmd_options.floodyears.split("-")
   years_int = [int(y) for y in years]
   years_range = range(years_int[0], years_int[0] +1) if len(years_int)==1 else range(years_int[0], years_int[1]+1)
-  years_list = list(years_range)
   with open('locations.json') as json_file:
     data = json.load(json_file)
     locations = data['locations']
     filtered_locations =  locations if (cmd_options.locid == None) else list(filter(lambda loc: loc['id'] == cmd_options.locid , locations))
     filtered_locations =  filtered_locations if (cmd_options.source == None) else list(filter(lambda loc: loc['source'] == cmd_options.source , filtered_locations))
+    if not filtered_locations:
+      print('WARNING: no locations matched filters (id={}, source={})'.format(cmd_options.locid, cmd_options.source))
+      return
     load(filtered_locations, years_range)
   
 

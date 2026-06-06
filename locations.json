@@ -66,6 +66,12 @@
       "riverMile": 22
     },
     {
+      "id": "SVPA-19",
+      "name": "Stuart Landing",
+      "source": "SVPA",
+      "riverMile": 19
+    },
+    {
       "id": "SVPA-17",
       "name": "Goose & Gander Farm",
       "source": "SVPA",
@@ -89,6 +95,18 @@
       "source": "SVPA",
       "riverMile": 12
     },
-    { "id": "12150400", "name": "Duvall", "source": "USGS", "riverMile": 9 }
+    { "id": "12150400", "name": "Duvall", "source": "USGS", "riverMile": 9 },
+    {
+      "id": "SVPA-6",
+      "name": "Cherry Creek",
+      "source": "SVPA",
+      "riverMile": 6
+    },
+    {
+      "id": "SVPA-6B",
+      "name": "Cherry Valley Wildlife Area",
+      "source": "SVPA",
+      "riverMile": 6
+    }
   ]
 }

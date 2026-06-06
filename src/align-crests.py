@@ -28,7 +28,7 @@ def align_crests(updstream_crests_path:str, downstread_crests_path:str):
   down_df = pd.read_csv(downstread_crests_path, parse_dates=['utc'], delimiter="\t")
   for label, up_row in up_df.iterrows():
     found_row = find_crest(up_row['utc'], down_df, False)
-    if None != found_row:
+    if found_row is not None:
       aligned_crests.append({
           'up_utc': up_row['utc'],
           'down_utc': found_row['utc'],

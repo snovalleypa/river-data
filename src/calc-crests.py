@@ -11,7 +11,7 @@ def ensure_dir(file_path):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def calc_crest(path:str):
+def calc_crest(path:str, measure:str='stage'):
   df = pd.read_parquet(path)
   #df = pd.read_parquet('data/usgs/')
   df.sort_index(inplace=True)
@@ -30,7 +30,6 @@ def calc_crest(path:str):
   gap_hours = 18
   crests = []
   min_delta_ratio = 0.25 # 25%
-  measure = 'stage'
   stage_delta = 1.0 # ft
 
 
@@ -65,16 +64,16 @@ def calc_crest(path:str):
       
       previous_min = discharge
       previous_min_at = timestamp
-      previous_max = 0
-      previous_max_at = 0
+      previous_max = -np.inf
+      previous_max_at = timestamp
       max_row = None
       # if count > 5000:
       #   break
 
   return pd.DataFrame(crests)
 
-def gen_crests(station_path:str):
-  df_crests = calc_crest('data/' + station_path)
+def gen_crests(station_path:str, measure:str='stage'):
+  df_crests = calc_crest('data/' + station_path, measure)
   path = 'crests/' + station_path + "/{}-crests.csv".format(station_path.replace("/","-"))
   ensure_dir(path)
   df_crests.to_csv(path,index_label="utc", sep="\t", date_format="%Y-%m-%d %H:%M:%S")
@@ -91,6 +90,6 @@ def main():
   # gen_crests('usgs/12149000') # Carnation
 #   gen_crests('usgs/12144500') # Falls
 #   gen_crests('usgs/12141300') # MF
-# gen_crests('usgs/forks') # sum of forks
+  gen_crests('usgs/forks', measure='discharge') # sum of forks (synthetic station, discharge-only, not in locations.json)
 
 main()
