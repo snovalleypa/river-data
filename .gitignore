@@ -3,3 +3,4 @@
 data/
 hydrofunctions_testing.log
 .ipynb_checkpoints/
+.venv/
