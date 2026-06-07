@@ -1,4 +1,23 @@
 {
+  "SVPA-15": {
+    "name": "124th East",
+    "overrides": { "2026 - March": null }
+  },
+  "SVPA-17": {
+    "name": "Goose & Gander",
+    "overrides": {
+      "2020 - February 7th": null,
+      "2020 - February 1st": null,
+      "2021 - January": null,
+      "2025 - December": null
+    }
+  },
+  "SVPA-19": {
+    "name": "Stuart Landing",
+    "overrides": {
+      "2025 - December": null
+    }
+  },
   "SVPA-23": {
     "name": "Stosal Bridge",
     "overrides": {
@@ -8,6 +27,8 @@
   "SVPA-26": {
     "name": "Blue Heron Golf",
     "overrides": {
+      "2022 - November ": null,
+      "2025 - December": null,
       "2021 - January": null,
       "2020 - February 7th": null,
       "2020 - February 1st": null,
@@ -17,6 +38,7 @@
   "SVPA-34": {
     "name": "The T",
     "overrides": {
+      "2022 - November ": null,
       "2022 - January 21st": null,
       "2021 - January": null,
       "2019 - December": null
@@ -28,19 +50,22 @@
       "2021 - January": null
     }
   },
+  "SVPA-36": {
+    "name": "Neal Road",
+    "overrides": {
+      "2025 - December": null,
+      "2022 - November ": null
+    }
+  },
   "SVPA-37": {
     "name": "Sno Falls Golf",
     "overrides": {
       "2021 - January": null,
-      "2022 - January 7th": { "stage": 87.41 }
-    }
-  },
-  "SVPA-17": {
-    "name": "Goose & Gander",
-    "overrides": {
-      "2020 - February 7th": null,
-      "2020 - February 1st": null,
-      "2021 - January": null
+      "2022 - January 7th": { "stage": 87.41 },
+      "2022 - November ": { "stage": 94.47 },
+      "2023 - December": { "stage": 91.72 },
+      "2025 - December": { "stage": 97.91 },
+      "2026 - March": { "stage": 91.63 }
     }
   }
 }

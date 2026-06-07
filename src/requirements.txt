@@ -6,3 +6,6 @@ requests
 pytz
 argparse
 hydrofunctions
+plotly
+nbformat
+scikit-learn
