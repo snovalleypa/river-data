@@ -1,0 +1,53 @@
+{
+  "__schema__": {
+    "description": "Per-gauge crest exclusions consumed by notebooks/svpa-forecast-regression.ipynb. Keyed by SVPA gauge id. 'exclude' maps a Carnation event_date (YYYY-MM-DD, exactly as shown in the plot hover labels) to a reason string. Excluded events are dropped from that gauge's regression and probability curve. Keys beginning with '__' are ignored by the loader.",
+    "example": {
+      "SVPA-29": {
+        "name": "Jubilee Farm",
+        "exclude": {
+          "2020-02-08": "stuck sensor, crest reads flat"
+        }
+      }
+    }
+  },
+  "SVPA-37": {
+    "name": "Sno Falls Golf",
+    "exclude": {
+      "2021-01-14": "erratic crest data",
+      "2022-10-31": "missing crest data"
+    }
+  },
+  "SVPA-36": {
+    "name": "Neal Road",
+    "exclude": {
+      "2022-11-05": "missing crest data"
+    }
+  },
+  "SVPA-34": {
+    "name": "The T",
+    "exclude": {
+      "2022-11-05": "missing crest data",
+      "2025-03-25": "missing crest data",
+      "2019-12-21": "spotty crest data"
+    }
+  },
+  "SVPA-26": {
+    "name": "Blue Heron Golf",
+    "exclude": {
+      "2022-11-05": "missing crest data",
+      "2020-02-08": "missing crest data"
+    }
+  },
+  "SVPA-17": {
+    "name": "Goose & Gander",
+    "exclude": {
+      "2020-02-08": "missing crest data"
+    }
+  },
+  "SVPA-15": {
+    "name": "NE 124 East",
+    "exclude": {
+      "2020-02-08": "missing crest data"
+    }
+  }
+}
