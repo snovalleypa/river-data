@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "generated": "2026-06-07",
+  "source": "notebooks/svpa-forecast-regression.ipynb",
+  "description": "Linear-regression predictions of SVPA gauge stage from NWRFC-forecast USGS predictor gauges, with Gaussian flood-probability factors. Includes gauges with fit R^2 > 0.9.",
+  "method": {
+    "heightPrediction": "predicted_stage = regression.slope * predictor_stage + regression.intercept",
+    "floodProbability": "P(stage >= redStage) = normalCdf((predicted_stage - floodProbability.redStage) / floodProbability.residualSigma)",
+    "validity": "Apply only when predictor_stage >= validRange.minPredictorStage; below that is extrapolation beyond observed data.",
+    "floodProbabilityThresholds": "floodProbability.p50/p90/p99 are the predictor_stage values at which P(stage >= redStage) = 0.50/0.90/0.99."
+  },
+  "predictors": {
+    "12149000": {
+      "floodzillaId": "USGS-22",
+      "usgsSiteId": "12149000",
+      "noaaSiteId": "CRNW1",
+      "name": "Carnation"
+    },
+    "12144500": {
+      "floodzillaId": "USGS-38",
+      "usgsSiteId": "12144500",
+      "noaaSiteId": "SQUW1",
+      "name": "Falls"
+    }
+  },
+  "gauges": [
+    {
+      "gaugeId": "SVPA-36",
+      "name": "Neal Road",
+      "redStage": 74.12,
+      "predictor": {
+        "floodzillaId": "USGS-38",
+        "usgsSiteId": "12144500",
+        "noaaSiteId": "SQUW1",
+        "name": "Falls"
+      },
+      "regression": {
+        "slope": 1.2184,
+        "intercept": 61.4783
+      },
+      "floodProbability": {
+        "redStage": 74.12,
+        "residualSigma": 0.6485,
+        "p50": 10.38,
+        "p90": 11.06,
+        "p99": 11.61
+      },
+      "validRange": {
+        "minPredictorStage": 11.08,
+        "maxPredictorStage": 16.91
+      },
+      "fit": {
+        "r2": 0.9181,
+        "n": 21
+      }
+    },
+    {
+      "gaugeId": "SVPA-34",
+      "name": "The T",
+      "redStage": 75.85,
+      "predictor": {
+        "floodzillaId": "USGS-38",
+        "usgsSiteId": "12144500",
+        "noaaSiteId": "SQUW1",
+        "name": "Falls"
+      },
+      "regression": {
+        "slope": 0.9015,
+        "intercept": 64.898
+      },
+      "floodProbability": {
+        "redStage": 75.85,
+        "residualSigma": 0.4407,
+        "p50": 12.15,
+        "p90": 12.77,
+        "p99": 13.29
+      },
+      "validRange": {
+        "minPredictorStage": 11.69,
+        "maxPredictorStage": 19.95
+      },
+      "fit": {
+        "r2": 0.9578,
+        "n": 22
+      }
+    },
+    {
+      "gaugeId": "SVPA-26",
+      "name": "Blue Heron Golf",
+      "redStage": 66.51,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 0.9925,
+        "intercept": 16.0117
+      },
+      "floodProbability": {
+        "redStage": 66.51,
+        "residualSigma": 0.2412,
+        "p50": 50.88,
+        "p90": 51.19,
+        "p99": 51.44
+      },
+      "validRange": {
+        "minPredictorStage": 51.28,
+        "maxPredictorStage": 58.73
+      },
+      "fit": {
+        "r2": 0.9894,
+        "n": 25
+      }
+    },
+    {
+      "gaugeId": "SVPA-25",
+      "name": "Tolt Hill Road",
+      "redStage": 68.43,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 1.0024,
+        "intercept": 14.6073
+      },
+      "floodProbability": {
+        "redStage": 68.43,
+        "residualSigma": 0.5356,
+        "p50": 53.7,
+        "p90": 54.38,
+        "p99": 54.94
+      },
+      "validRange": {
+        "minPredictorStage": 51.5,
+        "maxPredictorStage": 60.76
+      },
+      "fit": {
+        "r2": 0.9621,
+        "n": 25
+      }
+    },
+    {
+      "gaugeId": "SVPA-19",
+      "name": "Stuart Landing",
+      "redStage": 43.94,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 0.8199,
+        "intercept": 1.2509
+      },
+      "floodProbability": {
+        "redStage": 43.94,
+        "residualSigma": 0.4978,
+        "p50": 52.07,
+        "p90": 52.85,
+        "p99": 53.48
+      },
+      "validRange": {
+        "minPredictorStage": 53.59,
+        "maxPredictorStage": 60.76
+      },
+      "fit": {
+        "r2": 0.9859,
+        "n": 3
+      }
+    },
+    {
+      "gaugeId": "SVPA-15",
+      "name": "124th East",
+      "redStage": 42.91,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 1.1533,
+        "intercept": -18.9246
+      },
+      "floodProbability": {
+        "redStage": 42.91,
+        "residualSigma": 0.8916,
+        "p50": 53.62,
+        "p90": 54.61,
+        "p99": 55.42
+      },
+      "validRange": {
+        "minPredictorStage": 51.5,
+        "maxPredictorStage": 60.76
+      },
+      "fit": {
+        "r2": 0.9257,
+        "n": 26
+      }
+    },
+    {
+      "gaugeId": "SVPA-15B",
+      "name": "124th West",
+      "redStage": 45.25,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 1.0056,
+        "intercept": -9.3327
+      },
+      "floodProbability": {
+        "redStage": 45.25,
+        "residualSigma": 0.4945,
+        "p50": 54.28,
+        "p90": 54.91,
+        "p99": 55.42
+      },
+      "validRange": {
+        "minPredictorStage": 51.63,
+        "maxPredictorStage": 60.76
+      },
+      "fit": {
+        "r2": 0.9689,
+        "n": 18
+      }
+    },
+    {
+      "gaugeId": "SVPA-12",
+      "name": "Wild Canary Farm",
+      "redStage": 36.22,
+      "predictor": {
+        "floodzillaId": "USGS-22",
+        "usgsSiteId": "12149000",
+        "noaaSiteId": "CRNW1",
+        "name": "Carnation"
+      },
+      "regression": {
+        "slope": 1.1536,
+        "intercept": -20.3733
+      },
+      "floodProbability": {
+        "redStage": 36.22,
+        "residualSigma": 0.9833,
+        "p50": 49.06,
+        "p90": 50.15,
+        "p99": 51.04
+      },
+      "validRange": {
+        "minPredictorStage": 51.28,
+        "maxPredictorStage": 60.76
+      },
+      "fit": {
+        "r2": 0.9138,
+        "n": 31
+      }
+    }
+  ]
+}
