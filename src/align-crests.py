@@ -42,6 +42,6 @@ def align_crests(updstream_crests_path:str, downstread_crests_path:str):
 
 def main():
   # Falls => # Carnation
-  align_crests('crests/usgs/forks/usgs-forks-crests.csv', 'crests/usgs/12144500/usgs-12144500-crests.csv')
+  align_crests('crests/usgs/12149000/usgs-12149000-crests.csv', 'crests/usgs/12144500/usgs-12144500-crests.csv')
 
 main()

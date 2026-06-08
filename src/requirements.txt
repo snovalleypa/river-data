@@ -7,5 +7,7 @@ pytz
 argparse
 hydrofunctions
 plotly
+kaleido
 nbformat
+nbconvert
 scikit-learn

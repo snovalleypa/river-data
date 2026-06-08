@@ -14,13 +14,16 @@
     "name": "Sno Falls Golf",
     "exclude": {
       "2021-01-14": "erratic crest data",
-      "2022-10-31": "missing crest data"
+      "2022-10-31": "missing crest data",
+      "2022-12-25": "bad readings"
     }
   },
   "SVPA-36": {
     "name": "Neal Road",
     "exclude": {
-      "2022-11-05": "missing crest data"
+      "2022-11-05": "missing crest data",
+      "2025-12-10": "missing crest data",
+      "2026-03-12": "missing crest data"
     }
   },
   "SVPA-34": {
@@ -28,26 +31,64 @@
     "exclude": {
       "2022-11-05": "missing crest data",
       "2025-03-25": "missing crest data",
-      "2019-12-21": "spotty crest data"
+      "2019-12-21": "missing crest data",
+      "2020-01-24": "bad readings",
+      "2022-10-31": "didn't crest"
+    }
+  },
+  "SVPA-33": {
+    "name": "Keller Dairy",
+    "exclude": {
+      "2020-01-24": "missing crest data",
+      "2022-12-25": "missing crest data",
+      "2026-03-12": "missing crest data"
     }
   },
   "SVPA-26": {
     "name": "Blue Heron Golf",
     "exclude": {
       "2022-11-05": "missing crest data",
-      "2020-02-08": "missing crest data"
+      "2020-02-08": "missing crest data",
+      "2020-02-02": "missing crest data",
+      "2025-12-10": "missing crest data"
+    }
+  },
+  "SVPA-25": {
+    "name": "Tolt Hill Road",
+    "exclude": {
+      "2026-03-09": "missing crest data"
+    }
+  },
+  "SVPA-19": {
+    "name": "Stewart Landing",
+    "exclude": {
+      "2023-12-06": "missing crest data",
+      "2025-12-10": "missing crest data"
     }
   },
   "SVPA-17": {
     "name": "Goose & Gander",
     "exclude": {
-      "2020-02-08": "missing crest data"
+      "2020-02-08": "missing crest data",
+      "2020-02-02": "missing crest data"
     }
   },
   "SVPA-15": {
     "name": "NE 124 East",
     "exclude": {
       "2020-02-08": "missing crest data"
+    }
+  },
+  "SVPA-15B": {
+    "name": "124th West",
+    "exclude": {
+      "2026-03-09": "missing crest data"
+    }
+  },
+  "SVPA-12": {
+    "name": "Wild Canary Farm",
+    "exclude": {
+      "2025-12-10": "missing crest data"
     }
   }
 }
