@@ -7,8 +7,8 @@
     "heightPrediction": "predicted_stage = regression.slope * predictor_stage + regression.intercept",
     "floodProbability": "P(stage >= redStage) = normalCdf((predicted_stage - floodProbability.redStage) / floodProbability.residualSigma)",
     "validity": "Apply only when predictor_stage >= validRange.minPredictorStage; below that is extrapolation beyond observed data.",
-    "floodProbabilityThresholds": "floodProbability.p50/p90/p99 are the predictor_stage values at which P(stage >= redStage) = 0.50/0.90/0.99.",
-    "floodProbabilityFlow": "floodProbability.flow.p50/p90/p99 are those same thresholds expressed as predictor discharge (CFS), converted via the official USGS stage-discharge rating table for the predictor gauge. null means the threshold is outside the rating range."
+    "floodProbabilityThresholds": "floodProbability.p10/p50/p90/p99 are the predictor_stage values at which P(stage >= redStage) = 0.10/0.50/0.90/0.99.",
+    "floodProbabilityFlow": "floodProbability.flow.p10/p50/p90/p99 are those same thresholds expressed as predictor discharge (CFS), converted via the official USGS stage-discharge rating table for the predictor gauge. null means the threshold is outside the rating range."
   },
   "predictors": {
     "12149000": {
@@ -42,10 +42,12 @@
       "floodProbability": {
         "redStage": 74.12,
         "residualSigma": 0.6485,
+        "p10": 9.69,
         "p50": 10.38,
         "p90": 11.06,
         "p99": 11.61,
         "flow": {
+          "p10": 9617.7,
           "p50": 11172.6,
           "p90": 12825.7,
           "p99": 14250.9
@@ -77,10 +79,12 @@
       "floodProbability": {
         "redStage": 75.85,
         "residualSigma": 0.4407,
+        "p10": 11.52,
         "p50": 12.15,
         "p90": 12.77,
         "p99": 13.29,
         "flow": {
+          "p10": 14012.2,
           "p50": 15727.5,
           "p90": 17517.7,
           "p99": 19182.5
@@ -112,10 +116,12 @@
       "floodProbability": {
         "redStage": 66.51,
         "residualSigma": 0.2412,
+        "p10": 50.57,
         "p50": 50.88,
         "p90": 51.19,
         "p99": 51.44,
         "flow": {
+          "p10": 12836.0,
           "p50": 13686.8,
           "p90": 14432.4,
           "p99": 14980.1
@@ -147,10 +153,12 @@
       "floodProbability": {
         "redStage": 68.43,
         "residualSigma": 0.5356,
+        "p10": 53.01,
         "p50": 53.7,
         "p90": 54.38,
         "p99": 54.94,
         "flow": {
+          "p10": 18466.4,
           "p50": 20022.0,
           "p90": 21567.8,
           "p99": 22849.8
@@ -182,10 +190,12 @@
       "floodProbability": {
         "redStage": 43.94,
         "residualSigma": 0.4978,
+        "p10": 51.29,
         "p50": 52.07,
         "p90": 52.85,
         "p99": 53.48,
         "flow": {
+          "p10": 14651.2,
           "p50": 16369.7,
           "p90": 18107.6,
           "p99": 19524.5
@@ -217,10 +227,12 @@
       "floodProbability": {
         "redStage": 42.91,
         "residualSigma": 0.8916,
+        "p10": 52.63,
         "p50": 53.62,
         "p90": 54.61,
         "p99": 55.42,
         "flow": {
+          "p10": 17615.5,
           "p50": 19840.9,
           "p90": 22093.4,
           "p99": 23954.8
@@ -252,10 +264,12 @@
       "floodProbability": {
         "redStage": 45.25,
         "residualSigma": 0.4945,
+        "p10": 53.65,
         "p50": 54.28,
         "p90": 54.91,
         "p99": 55.42,
         "flow": {
+          "p10": 19908.8,
           "p50": 21339.7,
           "p90": 22780.9,
           "p99": 23954.8
@@ -287,10 +301,12 @@
       "floodProbability": {
         "redStage": 36.22,
         "residualSigma": 0.9833,
+        "p10": 47.97,
         "p50": 49.06,
         "p90": 50.15,
         "p99": 51.04,
         "flow": {
+          "p10": 4977.3,
           "p50": 7773.0,
           "p90": 11660.7,
           "p99": 14104.9

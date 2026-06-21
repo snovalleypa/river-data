@@ -90,7 +90,11 @@ That data is hosted on GCS (`gs://fz-dev-public`) and loaded by the app by URL;
   `status` property is a *map* keyed by level, e.g.
   `{"minor": "nearFlooding", "moderate": "flooding", "major": "flooding"}`. Valid
   statuses: `normal`, `nearFlooding`, `flooding`. Do **not** hand-edit the per-level
-  RoadClosures files — they're generated.
+  RoadClosures files — they're generated. A road's status can be set explicitly or
+  derived from a nearby gauge's `floodProbability.flow` percentiles in
+  `data_files/floodzilla-predictions.json` (the `add-flood-visualizer-road` skill's
+  `--gauge` option: per level, CFS `< p10` → normal, `p10..p99` → nearFlooding,
+  `> p99` → flooding); the chosen gauge is recorded on the feature as `gauge`.
 - **`flood_extents/generate_road_closures.py`** — reads the source + region config
   and writes one `RoadClosures_<cfs>CFS.geojson` per level into the publishable
   bundle **`floodzuki_dist/`** (gitignored), alongside copies of the config and each

@@ -10,7 +10,8 @@
           "minor": "nearFlooding",
           "moderate": "flooding",
           "major": "flooding"
-        }
+        },
+        "gauge": "SVPA-15B"
       },
       "geometry": {
         "type": "LineString",
