@@ -5,9 +5,12 @@
       "type": "Feature",
       "properties": {
         "name": "NE 124th St",
-        "level": "moderate",
-        "status": "flooding",
-        "label": "NE 124th - Closed"
+        "label": "NE 124th",
+        "status": {
+          "minor": "nearFlooding",
+          "moderate": "flooding",
+          "major": "flooding"
+        }
       },
       "geometry": {
         "type": "LineString",

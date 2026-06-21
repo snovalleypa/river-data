@@ -126,6 +126,32 @@ python src/align-crests.py
 
 `-y` / `--floodyears` takes a single water year (`2022`) or an inclusive range (`2001-2026`).
 
+## Flood Visualizer map data
+
+Separate from the gauge pipeline, the repo also holds the map data behind the
+Floodzilla app's **Flood Visualizer** (the "Map" tab), which shows — per flood
+level (minor / moderate / major, keyed by CFS) — the river's inundation extent plus
+road-closure overlays. This data is published to and served from Google Cloud
+Storage; [`floodzuki_data/`](floodzuki_data/) is the committed mirror.
+
+- **`flood-viz-levels-region-N.json`** — the level config: each level's CFS, its
+  inundation polygon file, and its road-closure file. New levels are added here.
+- **`FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — the inundation polygons for
+  each level, cleaned and simplified by [`flood_extents/fix_and_simplify.py`](flood_extents/fix_and_simplify.py).
+- **`floodzilla_roads_region_N.geojson`** — the single source for road closures.
+  Each road is one line whose `status` (`normal` / `nearFlooding` / `flooding`) is
+  recorded **per flood level**.
+
+[`flood_extents/generate_road_closures.py`](flood_extents/generate_road_closures.py)
+turns that one source into the per-level road-closure files and assembles a
+ready-to-publish bundle in `floodzuki_dist/` (gitignored). The line color and
+caption ("Open" / "Possible Closure" / "Closed") are derived from each road's status
+per level, so you maintain one file instead of one per level.
+
+```bash
+python3 flood_extents/generate_road_closures.py
+```
+
 ## Repository layout
 
 ```
@@ -135,6 +161,10 @@ data/              # raw Parquet readings (gitignored; regenerate via fetch)
 crests/            # detected crests per station + aligned.csv (committed)
 data_files/        # manual reference/correction files (committed)
 notebooks/         # analysis on top of pipeline outputs (not automated)
+floodzuki_data/    # Flood Visualizer map data: level config, inundation
+                   #   polygons, road-closure source (committed mirror of GCS)
+flood_extents/     # scripts to clean inundation polygons & generate road closures
+floodzuki_dist/    # generated, publishable Flood Visualizer bundle (gitignored)
 ```
 
 `notebooks/` holds exploratory analysis — crest timing, mapping peak annual height, etc. — that reads directly from `data/` and `crests/`. `data_files/historic-crest-overrides.json` is a manual correction layer for the crest-analysis notebooks (suppress false positives or override a detected value).

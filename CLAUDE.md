@@ -67,6 +67,45 @@ Single source of truth for every monitoring station. Each entry has `id`, `name`
 
 `notebooks/` holds analysis on top of the pipeline outputs (crest timing, peak annual height mapping, etc.). They read directly from `data/` and `crests/` and are not part of the automated pipeline. `data_files/historic-crest-overrides.json` is a manual correction layer consumed by the crest-analysis notebooks — keys are station IDs, values map event labels to `null` (suppress a false-positive crest) or `{"stage": X}` (override the detected value).
 
+`notebooks/svpa-forecast-regression.ipynb` exports `data_files/floodzilla-predictions.json` (see its "Export predictions for Floodzilla" section). **The schema of this export is now consumed by code in the Floodzilla app.** Consumers tolerate *added* properties, so adding a field is safe; what breaks them is **renaming, moving, removing, or changing the type/meaning of an existing property** — avoid those unless necessary, as they require a coordinated change in the app. `schemaVersion` is a dotted `"major.minor"` string: bump the **minor** when adding properties, the **major** only for a breaking change to existing ones.
+
+## Flood Visualizer (inundation map)
+
+Separate from the gauge pipeline. The Floodzilla app's **Flood Visualizer** (the
+"Map" tab) shows, per flood level, the inundation extent plus road-closure overlays.
+That data is hosted on GCS (`gs://fz-dev-public`) and loaded by the app by URL;
+`floodzuki_data/` is the **committed local mirror** of that bucket, and
+`flood_extents/` holds the scripts that produce it.
+
+- **`floodzuki_data/flood-viz-levels-region-<N>.json`** — region config: a `levels`
+  array where each entry has a `key` (minor/moderate/major/…), `cfs`, an inundation
+  `file`, and a `roadClosuresFile`. The generator iterates this, so **adding a level
+  needs no code change** — add an entry (and the matching FloodExtent file).
+- **`floodzuki_data/FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — inundation
+  polygons per level. Produced from raw ArcGIS exports by
+  **`flood_extents/fix_and_simplify.py`**, which fixes exterior-ring winding
+  (ArcGIS CW even-odd → RFC 7946 CCW) and simplifies via `npx mapshaper`.
+- **`floodzuki_data/floodzilla_roads_region_<N>.geojson`** — the **single
+  maintained source** for road closures. Each road is one `LineString` feature whose
+  `status` property is a *map* keyed by level, e.g.
+  `{"minor": "nearFlooding", "moderate": "flooding", "major": "flooding"}`. Valid
+  statuses: `normal`, `nearFlooding`, `flooding`. Do **not** hand-edit the per-level
+  RoadClosures files — they're generated.
+- **`flood_extents/generate_road_closures.py`** — reads the source + region config
+  and writes one `RoadClosures_<cfs>CFS.geojson` per level into the publishable
+  bundle **`floodzuki_dist/`** (gitignored), alongside copies of the config and each
+  level's FloodExtent file. The per-level caption is derived from status:
+  `normal`→"Open", `nearFlooding`→"Possible Closure", `flooding`→"Closed". A road
+  omits a level it has no status for. Run from the repo root:
+  `python3 flood_extents/generate_road_closures.py` (`--region`, `--data-dir`,
+  `--dist-dir` configurable).
+- **Publish:** upload `floodzuki_dist/` to `gs://fz-dev-public`. The app colors each
+  road line from its `status` (no color in the GeoJSON) and reads the caption from
+  `label`. The `add-flood-visualizer-road` skill automates adding/updating one road
+  (fetch OSM geometry → upsert into the source → regenerate).
+
 ## Data layout
 
-`data/` is **gitignored** — it must be regenerated via `fetch-gauge-data.py`. `crests/` and `data_files/` are committed.
+`data/` and `floodzuki_dist/` are **gitignored** — `data/` is regenerated via
+`fetch-gauge-data.py`, `floodzuki_dist/` via `generate_road_closures.py`. `crests/`,
+`data_files/`, and `floodzuki_data/` (the inundation-map mirror) are committed.

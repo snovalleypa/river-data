@@ -1,6 +1,7 @@
 # git ignore
 **/.DS_Store
 data/
+floodzuki_dist/
 hydrofunctions_testing.log
 .ipynb_checkpoints/
 .venv/
