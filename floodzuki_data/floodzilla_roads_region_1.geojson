@@ -1346,6 +1346,7 @@
         "name": "David Powell Rd",
         "label": "David Powell Rd",
         "status": {
+          "minor": "normal",
           "moderate": "nearFlooding",
           "major": "flooding"
         }
@@ -2674,6 +2675,39 @@
           [
             -121.9639278,
             47.6704529
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "268th Ave NE",
+        "label": "268th Ave NE",
+        "status": {
+          "minor": "flooding",
+          "moderate": "flooding",
+          "major": "flooding"
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -121.9808908,
+            47.7006164
+          ],
+          [
+            -121.9810712,
+            47.697814
+          ],
+          [
+            -121.981231,
+            47.6940474
+          ],
+          [
+            -121.9813234,
+            47.693892
           ]
         ]
       }
