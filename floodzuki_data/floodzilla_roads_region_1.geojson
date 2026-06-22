@@ -2636,6 +2636,47 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ames Lake - Carnation Rd",
+        "label": "Ames Lake - Carnation Rd",
+        "status": {
+          "minor": "normal",
+          "moderate": "nearFlooding",
+          "major": "flooding"
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -121.9625448,
+            47.6738942
+          ],
+          [
+            -121.9626166,
+            47.6736516
+          ],
+          [
+            -121.9627502,
+            47.6733103
+          ],
+          [
+            -121.9630844,
+            47.6724937
+          ],
+          [
+            -121.9636408,
+            47.6711337
+          ],
+          [
+            -121.9639278,
+            47.6704529
+          ]
+        ]
+      }
     }
   ]
 }
