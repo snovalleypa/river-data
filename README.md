@@ -142,14 +142,15 @@ Storage; [`floodzuki_data/`](floodzuki_data/) is the committed mirror.
   Each road is one line whose `status` (`normal` / `nearFlooding` / `flooding`) is
   recorded **per flood level**.
 
-[`flood_extents/generate_road_closures.py`](flood_extents/generate_road_closures.py)
-turns that one source into the per-level road-closure files and assembles a
-ready-to-publish bundle in `floodzuki_dist/` (gitignored). The line color and
-caption ("Open" / "Possible Closure" / "Closed") are derived from each road's status
-per level, so you maintain one file instead of one per level.
+[`flood_extents/generate_flood_viz_dist.py`](flood_extents/generate_flood_viz_dist.py)
+turns those sources into a ready-to-publish bundle in `floodzuki_dist/` (gitignored):
+the per-level road-closure files (line color and caption — "Open" / "Possible
+Closure" / "Closed" — derived from each road's status per level, so you maintain one
+file instead of one per level), an enriched region config that adds a gage height
+(`feet`) per level from the USGS rating table, and each level's FloodExtent file.
 
 ```bash
-python3 flood_extents/generate_road_closures.py
+python3 flood_extents/generate_flood_viz_dist.py
 ```
 
 ## Repository layout

@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
 """
-generate_road_closures.py  [--region N] [--data-dir DIR] [--dist-dir DIR]
+generate_flood_viz_dist.py  [--region N] [--data-dir DIR] [--dist-dir DIR] [--rating-site ID]
 
-Build the per-flood-level RoadClosures GeoJSON files (one per level) from a single
-maintained source, then assemble a publishable bundle.
+Assemble the publishable Flood Visualizer bundle in --dist-dir from the maintained
+inputs in --data-dir. This:
 
+  1. Builds the per-flood-level RoadClosures GeoJSON files (one per level) from a
+     single maintained source roads file (see "Road closures" below).
+  2. Enriches the region config with a gage height (`feet`) per level, converting
+     each level's `cfs` via the USGS stage-discharge rating table for the region's
+     gauge (default Carnation, USGS 12149000), and writes the enriched config into
+     the bundle. The committed source config is left untouched.
+  3. Copies each level's FloodExtent file into the bundle.
+
+Publish the resulting --dist-dir to gs://fz-dev-public to update the live map.
+
+Road closures
+-------------
 Instead of hand-editing one RoadClosures file per level, you maintain one source
 FeatureCollection:
 
@@ -32,15 +44,20 @@ every road that has a status for that level, with the per-level `status` and a
 The app colors each line from `status` (no color is stored in the GeoJSON).
 
 Outputs everything the Flood Visualizer needs into --dist-dir (default
-./floodzuki_dist, gitignored): the generated RoadClosures_*.geojson, a copy of the
-region config, and a copy of each level's referenced FloodExtent file. Publish that
-bundle to gs://fz-dev-public to update the live map.
+./floodzuki_dist, gitignored): the generated RoadClosures_*.geojson, the enriched
+region config, and a copy of each level's referenced FloodExtent file.
 """
 import argparse
 import json
 import os
 import shutil
 import sys
+import urllib.request
+
+# USGS gauge whose rating table converts each level's `cfs` to a gage height
+# (`feet`). Region 1's inundation extents are keyed to Snoqualmie River near
+# Carnation. Override with --rating-site.
+DEFAULT_RATING_SITE = "12149000"  # Snoqualmie River near Carnation (CRNW1)
 
 # status -> caption suffix. The presence of a status here means it is rendered;
 # the app maps the same status to a color (normal=green, nearFlooding=yellow,
@@ -50,6 +67,52 @@ STATUS_LABEL_SUFFIX = {
     "nearFlooding": "Possible Closure",
     "flooding": "Closed",
 }
+
+
+def fetch_usgs_rating(site_no):
+    """Fetch the USGS stage-discharge rating for `site_no`.
+
+    Uses the official "exsa" (expanded, shift-adjusted) rating depot table, which is
+    authoritative and matches what NWRFC uses. Columns: INDEP (gage height ft),
+    SHIFT, DEP (discharge cfs), STOR. Returns (stage[], disch[]) sorted ascending by
+    stage. Stdlib-only so the bundle build needs no extra deps.
+    """
+    url = ("https://nwis.waterdata.usgs.gov/nwisweb/get_ratings"
+           f"?file_type=exsa&site_no={site_no}")
+    text = urllib.request.urlopen(url, timeout=60).read().decode("utf-8", "replace")
+    pairs = []
+    for line in text.splitlines():
+        if line.startswith("#") or not line.strip():
+            continue
+        parts = line.split("\t")
+        if parts[0] in ("INDEP", "16N"):  # column-name and format header rows
+            continue
+        try:
+            pairs.append((float(parts[0]), float(parts[2])))
+        except (ValueError, IndexError):
+            continue
+    if not pairs:
+        sys.exit(f"USGS rating for site {site_no} returned no usable rows.")
+    pairs.sort()
+    return [s for s, _ in pairs], [d for _, d in pairs]
+
+
+def cfs_to_feet(cfs, stage, disch):
+    """Convert discharge `cfs` to gage height via the rating, or None if out of range.
+
+    Linear interpolation on the (monotonic) discharge->stage curve. Returns None
+    outside the rating's discharge span rather than extrapolating.
+    """
+    if cfs < disch[0] or cfs > disch[-1]:
+        return None
+    for i in range(1, len(disch)):
+        if cfs <= disch[i]:
+            d0, d1 = disch[i - 1], disch[i]
+            s0, s1 = stage[i - 1], stage[i]
+            if d1 == d0:
+                return round(s0, 2)
+            return round(s0 + (s1 - s0) * (cfs - d0) / (d1 - d0), 2)
+    return round(stage[-1], 2)
 
 
 def load_json(path):
@@ -93,10 +156,11 @@ def closure_feature(road, level_key):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Generate per-level RoadClosures files from a single source.")
+    ap = argparse.ArgumentParser(description="Assemble the publishable Flood Visualizer dist bundle from a single source.")
     ap.add_argument("--region", default="1", help="Region id; selects the config and source filenames (default 1).")
     ap.add_argument("--data-dir", default="floodzuki_data", help="Input dir holding the config, source roads, and FloodExtent files (default ./floodzuki_data).")
     ap.add_argument("--dist-dir", default="floodzuki_dist", help="Output bundle dir, rebuilt from scratch (default ./floodzuki_dist).")
+    ap.add_argument("--rating-site", default=DEFAULT_RATING_SITE, help=f"USGS site whose rating converts each level's cfs to feet (default {DEFAULT_RATING_SITE}, Carnation).")
     args = ap.parse_args()
 
     config_name = f"flood-viz-levels-region-{args.region}.json"
@@ -132,9 +196,24 @@ def main():
         write_json(os.path.join(args.dist_dir, out_name), {"type": "FeatureCollection", "features": feats})
         print(f"  {out_name}: {len(feats)} road(s) [{key}]")
 
-    # Copy the region config and each level's FloodExtent file into the bundle.
-    shutil.copy2(config_path, os.path.join(args.dist_dir, config_name))
-    print(f"  copied {config_name}")
+    # Enrich each level with a gage height (`feet`) from the USGS rating, then write
+    # the enriched config into the bundle. The committed source config is untouched.
+    print(f"  fetching rating for USGS site {args.rating_site} ...")
+    try:
+        stage, disch = fetch_usgs_rating(args.rating_site)
+    except Exception as exc:  # network/HTTP failure -- fail loudly, don't publish heightless
+        sys.exit(f"Failed to fetch USGS rating for site {args.rating_site}: {exc}")
+    for level in levels:
+        cfs = level.get("cfs")
+        feet = cfs_to_feet(cfs, stage, disch) if cfs is not None else None
+        level["feet"] = feet
+        if feet is None:
+            print(f"  ! level {level.get('key')!r}: cfs {cfs} outside rating range "
+                  f"[{disch[0]:.0f}, {disch[-1]:.0f}] cfs -> feet=null")
+        else:
+            print(f"  level {level.get('key')!r}: {cfs} cfs -> {feet} ft")
+    write_json(os.path.join(args.dist_dir, config_name), config)
+    print(f"  wrote enriched {config_name}")
     for level in levels:
         extent = level.get("file")
         if not extent:

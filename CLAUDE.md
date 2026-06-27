@@ -95,14 +95,18 @@ That data is hosted on GCS (`gs://fz-dev-public`) and loaded by the app by URL;
   `data_files/floodzilla-predictions.json` (the `add-flood-visualizer-road` skill's
   `--gauge` option: per level, CFS `< p10` → normal, `p10..p99` → nearFlooding,
   `> p99` → flooding); the chosen gauge is recorded on the feature as `gauge`.
-- **`flood_extents/generate_road_closures.py`** — reads the source + region config
-  and writes one `RoadClosures_<cfs>CFS.geojson` per level into the publishable
-  bundle **`floodzuki_dist/`** (gitignored), alongside copies of the config and each
-  level's FloodExtent file. The per-level caption is derived from status:
-  `normal`→"Open", `nearFlooding`→"Possible Closure", `flooding`→"Closed". A road
-  omits a level it has no status for. Run from the repo root:
-  `python3 flood_extents/generate_road_closures.py` (`--region`, `--data-dir`,
-  `--dist-dir` configurable).
+- **`flood_extents/generate_flood_viz_dist.py`** — assembles the full publishable
+  bundle **`floodzuki_dist/`** (gitignored) from the source + region config. It (1)
+  writes one `RoadClosures_<cfs>CFS.geojson` per level — the per-level caption is
+  derived from status: `normal`→"Open", `nearFlooding`→"Possible Closure",
+  `flooding`→"Closed"; a road omits a level it has no status for — (2) writes an
+  **enriched copy of the region config** adding a gage height `feet` per level,
+  converting each level's `cfs` via the USGS stage-discharge rating table fetched
+  live for the region's gauge (default Carnation, USGS `12149000`; `--rating-site`
+  to change; `feet` is `null` for a level outside the rating range), and (3) copies
+  each level's FloodExtent file. The committed source config is left untouched. Run
+  from the repo root: `python3 flood_extents/generate_flood_viz_dist.py`
+  (`--region`, `--data-dir`, `--dist-dir`, `--rating-site` configurable).
 - **Publish:** upload `floodzuki_dist/` to `gs://fz-dev-public`. The app colors each
   road line from its `status` (no color in the GeoJSON) and reads the caption from
   `label`. The `add-flood-visualizer-road` skill automates adding/updating one road
@@ -111,5 +115,5 @@ That data is hosted on GCS (`gs://fz-dev-public`) and loaded by the app by URL;
 ## Data layout
 
 `data/` and `floodzuki_dist/` are **gitignored** — `data/` is regenerated via
-`fetch-gauge-data.py`, `floodzuki_dist/` via `generate_road_closures.py`. `crests/`,
+`fetch-gauge-data.py`, `floodzuki_dist/` via `generate_flood_viz_dist.py`. `crests/`,
 `data_files/`, and `floodzuki_data/` (the inundation-map mirror) are committed.
