@@ -1,4 +1,5 @@
 {
+  "modelBoundaryFile": "ModelBoundary.geojson",
   "levels": [
     {
       "key": "minor",

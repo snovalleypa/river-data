@@ -12,6 +12,10 @@ inputs in --data-dir. This:
      gauge (default Carnation, USGS 12149000), and writes the enriched config into
      the bundle. The committed source config is left untouched.
   3. Copies each level's FloodExtent file into the bundle.
+  4. Copies the region's 2D-model boundary file (`modelBoundaryFile` in the config,
+     e.g. ModelBoundary.geojson — converted from the King County 2D_Model_Boundary
+     KML) into the bundle. The app draws it as an unfilled outline whenever a flood
+     level is shown, so people can see the extent of the modeled area.
 
 Publish the resulting --dist-dir to gs://fz-dev-public to update the live map.
 
@@ -224,6 +228,16 @@ def main():
             continue
         shutil.copy2(src, os.path.join(args.dist_dir, extent))
         print(f"  copied {extent}")
+
+    # The 2D-model boundary outline, shared by all levels.
+    boundary = config.get("modelBoundaryFile")
+    if boundary:
+        src = os.path.join(args.data_dir, boundary)
+        if os.path.exists(src):
+            shutil.copy2(src, os.path.join(args.dist_dir, boundary))
+            print(f"  copied {boundary}")
+        else:
+            print(f"  ! model boundary missing, not copied: {src}")
 
     print(f"done -> {args.dist_dir}")
 
