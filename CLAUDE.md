@@ -77,15 +77,20 @@ That data is hosted on GCS (`gs://fz-dev-public`) and loaded by the app by URL;
 `floodzuki_data/` is the **committed local mirror** of that bucket, and
 `flood_extents/` holds the scripts that produce it.
 
+Layout: the region config sits at the `floodzuki_data/` root; **every other region
+file lives under a `region-<N>/` subfolder**, and the config's file references carry
+that prefix. The generated `floodzuki_dist/` bundle mirrors the same structure.
+
 - **`floodzuki_data/flood-viz-levels-region-<N>.json`** — region config: a `levels`
   array where each entry has a `key` (minor/moderate/major/…), `cfs`, an inundation
-  `file`, and a `roadClosuresFile`. The generator iterates this, so **adding a level
+  `file`, and a `roadClosuresFile` (both paths relative to the data dir, e.g.
+  `region-1/FloodExtent_…`). The generator iterates this, so **adding a level
   needs no code change** — add an entry (and the matching FloodExtent file).
-- **`floodzuki_data/FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — inundation
+- **`floodzuki_data/region-<N>/FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — inundation
   polygons per level. Produced from raw ArcGIS exports by
   **`flood_extents/fix_and_simplify.py`**, which fixes exterior-ring winding
   (ArcGIS CW even-odd → RFC 7946 CCW) and simplifies via `npx mapshaper`.
-- **`floodzuki_data/floodzilla_roads_region_<N>.geojson`** — the **single
+- **`floodzuki_data/region-<N>/floodzilla_roads_region_<N>.geojson`** — the **single
   maintained source** for road closures. Each road is one `LineString` feature whose
   `status` property is a *map* keyed by level, e.g.
   `{"minor": "nearFlooding", "moderate": "flooding", "major": "flooding"}`. Valid

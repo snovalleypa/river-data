@@ -134,13 +134,14 @@ level (minor / moderate / major, keyed by CFS) — the river's inundation extent
 road-closure overlays. This data is published to and served from Google Cloud
 Storage; [`floodzuki_data/`](floodzuki_data/) is the committed mirror.
 
-- **`flood-viz-levels-region-N.json`** — the level config: each level's CFS, its
-  inundation polygon file, and its road-closure file. New levels are added here.
-- **`FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — the inundation polygons for
-  each level, cleaned and simplified by [`flood_extents/fix_and_simplify.py`](flood_extents/fix_and_simplify.py).
-- **`floodzilla_roads_region_N.geojson`** — the single source for road closures.
-  Each road is one line whose `status` (`normal` / `nearFlooding` / `flooding`) is
-  recorded **per flood level**.
+- **`flood-viz-levels-region-N.json`** — the level config, at the `floodzuki_data/`
+  root: each level's CFS, its inundation polygon file, and its road-closure file
+  (paths relative to the data dir, under `region-N/`). New levels are added here.
+- **`region-N/FloodExtent_<cfs>CFS_fixed_simplified.geojson`** — the inundation
+  polygons for each level, cleaned and simplified by [`flood_extents/fix_and_simplify.py`](flood_extents/fix_and_simplify.py).
+- **`region-N/floodzilla_roads_region_N.geojson`** — the single source for road
+  closures. Each road is one line whose `status` (`normal` / `nearFlooding` /
+  `flooding`) is recorded **per flood level**.
 
 [`flood_extents/generate_flood_viz_dist.py`](flood_extents/generate_flood_viz_dist.py)
 turns those sources into a ready-to-publish bundle in `floodzuki_dist/` (gitignored):
@@ -162,8 +163,9 @@ data/              # raw Parquet readings (gitignored; regenerate via fetch)
 crests/            # detected crests per station + aligned.csv (committed)
 data_files/        # manual reference/correction files (committed)
 notebooks/         # analysis on top of pipeline outputs (not automated)
-floodzuki_data/    # Flood Visualizer map data: level config, inundation
-                   #   polygons, road-closure source (committed mirror of GCS)
+floodzuki_data/    # Flood Visualizer map data: level config at the root, with
+                   #   inundation polygons and the road-closure source under
+                   #   region-N/ (committed mirror of GCS)
 flood_extents/     # scripts to clean inundation polygons & generate road closures
 floodzuki_dist/    # generated, publishable Flood Visualizer bundle (gitignored)
 ```

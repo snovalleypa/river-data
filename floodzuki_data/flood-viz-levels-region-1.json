@@ -1,5 +1,5 @@
 {
-  "modelBoundaryFile": "ModelBoundary.geojson",
+  "modelBoundaryFile": "region-1/ModelBoundary_region_1.geojson",
   "levels": [
     {
       "key": "minor",
@@ -8,8 +8,8 @@
         "es": "Menor"
       },
       "cfs": 20000,
-      "file": "FloodExtent_20000CFS_fixed_simplified.geojson",
-      "roadClosuresFile": "RoadClosures_20000CFS.geojson"
+      "file": "region-1/FloodExtent_20000CFS_fixed_simplified.geojson",
+      "roadClosuresFile": "region-1/RoadClosures_20000CFS.geojson"
     },
     {
       "key": "moderate",
@@ -18,8 +18,8 @@
         "es": "Moderada"
       },
       "cfs": 32200,
-      "file": "FloodExtent_32200CFS_fixed_simplified.geojson",
-      "roadClosuresFile": "RoadClosures_32200CFS.geojson"
+      "file": "region-1/FloodExtent_32200CFS_fixed_simplified.geojson",
+      "roadClosuresFile": "region-1/RoadClosures_32200CFS.geojson"
     },
     {
       "key": "major",
@@ -28,8 +28,8 @@
         "es": "Mayor"
       },
       "cfs": 42500,
-      "file": "FloodExtent_42500CFS_fixed_simplified.geojson",
-      "roadClosuresFile": "RoadClosures_42500CFS.geojson"
+      "file": "region-1/FloodExtent_42500CFS_fixed_simplified.geojson",
+      "roadClosuresFile": "region-1/RoadClosures_42500CFS.geojson"
     }
   ]
 }

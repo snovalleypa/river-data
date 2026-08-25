@@ -13,7 +13,7 @@ inputs in --data-dir. This:
      the bundle. The committed source config is left untouched.
   3. Copies each level's FloodExtent file into the bundle.
   4. Copies the region's 2D-model boundary file (`modelBoundaryFile` in the config,
-     e.g. ModelBoundary.geojson — converted from the King County 2D_Model_Boundary
+     e.g. ModelBoundary_region_1.geojson — converted from the King County 2D_Model_Boundary
      KML) into the bundle. The app draws it as an unfilled outline whenever a flood
      level is shown, so people can see the extent of the modeled area.
 
@@ -24,7 +24,7 @@ Road closures
 Instead of hand-editing one RoadClosures file per level, you maintain one source
 FeatureCollection:
 
-    floodzuki_data/floodzilla_roads_region_<N>.geojson
+    floodzuki_data/region-<N>/floodzilla_roads_region_<N>.geojson
 
 Each road is one LineString feature whose `status` property is a *map* keyed by
 flood-level key, giving that road's status at each level:
@@ -167,8 +167,11 @@ def main():
     ap.add_argument("--rating-site", default=DEFAULT_RATING_SITE, help=f"USGS site whose rating converts each level's cfs to feet (default {DEFAULT_RATING_SITE}, Carnation).")
     args = ap.parse_args()
 
+    # Layout: the region config sits at the data/dist root; every other file
+    # (roads source, FloodExtent, boundary, generated RoadClosures) lives under a
+    # region-<N>/ subfolder. The config's file references carry that prefix.
     config_name = f"flood-viz-levels-region-{args.region}.json"
-    roads_name = f"floodzilla_roads_region_{args.region}.geojson"
+    roads_name = os.path.join(f"region-{args.region}", f"floodzilla_roads_region_{args.region}.geojson")
     config_path = os.path.join(args.data_dir, config_name)
     roads_path = os.path.join(args.data_dir, roads_name)
 
@@ -226,7 +229,9 @@ def main():
         if not os.path.exists(src):
             print(f"  ! FloodExtent missing, not copied: {src}")
             continue
-        shutil.copy2(src, os.path.join(args.dist_dir, extent))
+        dst = os.path.join(args.dist_dir, extent)
+        os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
+        shutil.copy2(src, dst)
         print(f"  copied {extent}")
 
     # The 2D-model boundary outline, shared by all levels.
@@ -234,7 +239,9 @@ def main():
     if boundary:
         src = os.path.join(args.data_dir, boundary)
         if os.path.exists(src):
-            shutil.copy2(src, os.path.join(args.dist_dir, boundary))
+            dst = os.path.join(args.dist_dir, boundary)
+            os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
+            shutil.copy2(src, dst)
             print(f"  copied {boundary}")
         else:
             print(f"  ! model boundary missing, not copied: {src}")
